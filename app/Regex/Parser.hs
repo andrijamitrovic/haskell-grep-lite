@@ -107,15 +107,15 @@ optionalChar c =
 
 repeatRegex :: Parser Reg
 repeatRegex = do
-  regex <- symbol
+  regex <- atom
   hasStar <- optionalChar '*'
   pure $
     if hasStar
       then Rep regex
       else regex
 
-regex :: Parser Reg
-regex =
+regexParser :: Parser Reg
+regexParser =
   altRegex
 
 altRegex :: Parser Reg
@@ -129,3 +129,26 @@ altRegex = do
         right <- concatRegex
         rest (Alt left right))
       <|> pure left
+
+atom :: Parser Reg
+atom =
+  symbol <|> parens
+
+parens :: Parser Reg
+parens = do
+  _ <- char '('
+  inside <- regexParser
+  _ <- char ')'
+  pure inside
+
+parseRegex :: String -> Maybe Reg
+parseRegex =
+  parseOnly regexParser
+
+isValidRegex :: String -> Bool
+isValidRegex input =
+  case parseRegex input of
+    Just _ ->
+      True
+    Nothing ->
+      False
