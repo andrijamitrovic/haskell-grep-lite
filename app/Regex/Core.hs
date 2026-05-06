@@ -53,7 +53,7 @@ final (MRep regex) =
   final regex
 
 shift :: Bool -> MReg -> Char -> MReg 
-shift marked MEps _ = 
+shift _ MEps _ = 
   MEps
 shift marked (MSym _ c) input = 
   MSym (marked && c == input) c 
