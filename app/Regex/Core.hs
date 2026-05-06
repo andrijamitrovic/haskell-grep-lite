@@ -11,7 +11,7 @@ data Reg
 data MReg
     = MEps
     | MSym Bool Char
-    | MAlt MReg Mreg
+    | MAlt MReg MReg
     | MSeq MReg MReg
     | MRep MReg
     deriving (Eq, Show)
@@ -43,7 +43,7 @@ nullable (MRep _) =
 final :: MReg -> Bool
 final MEps = 
   False
-final (Msym marked _) = 
+final (MSym marked _) = 
   marked
 final (MAlt left right) = 
   final left || final right
@@ -87,7 +87,8 @@ accept (Seq left right) input =
   or
     [ accept left prefix && accept right suffix
       | (prefix, suffix) <- split input
-    ]accept (Rep regex) input =
+    ] 
+accept (Rep regex) input = 
   or
     [ all (accept regex) pieces
       | pieces <- parts input
@@ -109,3 +110,4 @@ parts (x : xs) =
     [ [(x : piece) : rest, [x] : piece : rest]
       | piece : rest <- parts xs
     ]
+
