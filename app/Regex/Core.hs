@@ -111,3 +111,18 @@ parts (x : xs) =
       | piece : rest <- parts xs
     ]
 
+matchesAnywhere :: Reg -> String -> Bool
+matchesAnywhere regex input =
+  or [acceptFast regex suffixPrefix | suffix <- suffixes input, suffixPrefix <- prefixes suffix]
+
+prefixes :: [a] -> [[a]]
+prefixes [] =
+  [[]]
+prefixes (x : xs) =
+  [] : [x : prefix | prefix <- prefixes xs]
+
+suffixes :: [a] -> [[a]]
+suffixes [] =
+  [[]]
+suffixes input@(_ : xs) =
+  input : suffixes xs
