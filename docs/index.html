@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Haskell Grep Lite</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Haskell Grep Lite</h1>
+
+      <label>
+        Pattern
+        <input id="pattern" value="b" />
+      </label>
+
+      <label>
+        Input text
+        <textarea id="input">
+        </textarea>
+      </label>
+
+      <button id="run">Run</button>
+
+      <label>
+        Matches
+        <pre id="output"></pre>
+      </label>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
