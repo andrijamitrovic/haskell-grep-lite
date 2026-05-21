@@ -1,9 +1,8 @@
 module Main where
 
-import Regex.Core
-import Regex.Parser
 import System.Environment (getArgs)
 import Tests (runTests)
+import Grep.Engine
 
 main :: IO ()
 main = do
@@ -17,15 +16,10 @@ main = do
       putStrLn "usage: haskell-grep-lite PATTERN FILE"
 
 runGrep :: String -> FilePath -> IO ()
-runGrep patternText filePath =
-  case parseRegex patternText of
-    Nothing ->
-      putStrLn "invalid regex"
-    Just regex -> do
-      contents <- readFile filePath
-      mapM_
-        putStrLn
-        [ line
-          | line <- lines contents,
-            matchesAnywhere regex line
-        ]
+runGrep patternText filePath = do
+  contents <- readFile filePath
+  case grepText patternText contents of
+    Left err ->
+      putStrLn err
+    Right output ->
+      putStr output
